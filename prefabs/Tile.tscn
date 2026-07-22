@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://b2d4x6fe8wqvu"]
+
+[ext_resource type="Script" uid="uid://xbnkqp3fpcoh" path="res://scripts/tile.gd" id="1_7eqyh"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_q4lci"]
+
+[node name="Tile" type="Node2D" unique_id=256130380]
+script = ExtResource("1_7eqyh")
+
+[node name="Bg" type="Sprite2D" parent="." unique_id=122569874]
+unique_name_in_owner = true
+scale = Vector2(100, 100)
+texture = SubResource("CanvasTexture_q4lci")
+
+[node name="NumVal" type="Label" parent="." unique_id=1848572405]
+unique_name_in_owner = true
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -1.5
+offset_top = -3.5
+offset_right = 1.5
+offset_bottom = 3.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 62
