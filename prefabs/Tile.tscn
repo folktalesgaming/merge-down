@@ -4,12 +4,16 @@
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_q4lci"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_htemk"]
+size = Vector2(71, 72)
+
 [node name="Tile" type="Node2D" unique_id=256130380]
 script = ExtResource("1_7eqyh")
 
 [node name="Bg" type="Sprite2D" parent="." unique_id=122569874]
 unique_name_in_owner = true
-scale = Vector2(100, 100)
+self_modulate = Color(0, 0, 0, 1)
+scale = Vector2(70, 70)
 texture = SubResource("CanvasTexture_q4lci")
 
 [node name="NumVal" type="Label" parent="." unique_id=1848572405]
@@ -25,4 +29,16 @@ offset_bottom = 3.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 62
+theme_override_font_sizes/font_size = 36
+text = "1"
+
+[node name="DragArea" type="Area2D" parent="." unique_id=2003048907]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DragArea" unique_id=617698465]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_htemk")
+
+[connection signal="area_entered" from="DragArea" to="." method="_on_drag_area_area_entered"]
+[connection signal="area_exited" from="DragArea" to="." method="_on_drag_area_area_exited"]
+[connection signal="mouse_entered" from="DragArea" to="." method="_on_drag_area_mouse_entered"]
+[connection signal="mouse_exited" from="DragArea" to="." method="_on_drag_area_mouse_exited"]

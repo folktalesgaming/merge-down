@@ -12,3 +12,8 @@ enum OperatorType {
 	SINGLE,
 	MULTI,
 }
+
+enum DropZone {
+	ON_TOP,
+	IN_BETWEEN,
+}
