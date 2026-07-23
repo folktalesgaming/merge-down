@@ -2,5 +2,36 @@
 
 [ext_resource type="Script" uid="uid://bqwsrsdumtjck" path="res://scripts/game_play.gd" id="1_565gr"]
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_14cdr"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_htemk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_htemk"]
+size = Vector2(137, 20)
+
 [node name="GamePlay" type="Node2D" unique_id=1093606612]
 script = ExtResource("1_565gr")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=2298987]
+self_modulate = Color(0.4392157, 0.06666667, 0.54901963, 1)
+position = Vector2(573.99994, 321.00003)
+scale = Vector2(1185.9999, 684.00006)
+texture = SubResource("CanvasTexture_14cdr")
+
+[node name="MainGrid" type="Node2D" parent="." unique_id=903045838]
+unique_name_in_owner = true
+
+[node name="OperatorStack" type="Node2D" parent="." unique_id=110578599]
+unique_name_in_owner = true
+
+[node name="TempStack" type="Sprite2D" parent="." unique_id=1211098080]
+self_modulate = Color(0, 0, 0, 0.36078432)
+position = Vector2(1072, 208.125)
+scale = Vector2(83.999954, 321.75)
+texture = SubResource("CanvasTexture_htemk")
+
+[node name="TempStackBottom" type="Area2D" parent="." unique_id=2072537161]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TempStackBottom" unique_id=890341557]
+position = Vector2(1062, 552)
+shape = SubResource("RectangleShape2D_htemk")
