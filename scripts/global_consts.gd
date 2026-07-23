@@ -1,5 +1,4 @@
 class_name GlobalConst
-extends Node
 
 enum OperatorSymbol {
 	SUB,
