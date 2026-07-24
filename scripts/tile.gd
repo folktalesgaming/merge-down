@@ -82,18 +82,31 @@ func render_tile(val: int):
 	num_val.text = to_add_val
 	
 	if _type == GlobalConst.OperatorType.NUM:
+		set_sprite_type(1)
 		var rng := RandomNumberGenerator.new()
 		rng.seed = val
-		set_sprite_color(Color(rng.randf(), rng.randf(), rng.randf(), 1))
+		
+		var base_color := Color(rng.randf(), rng.randf(), rng.randf(), 1)
+		base_color = Utility.ensure_contrast_with_white(base_color) 
+		
+		set_sprite_color(base_color)
+		set_sprite_border_color(base_color.lightened(0.5))
 		
 		is_draggable = false
 	else:
 		if _type == GlobalConst.OperatorType.SINGLE:
 			drop_zone_type = GlobalConst.DropZone.ON_TOP
-			set_sprite_color(Color(0.4, 0.45, 0.35, 1))
+			var rng := RandomNumberGenerator.new()
+			rng.seed = val
+			
+			var base_color := Color(rng.randf(), rng.randf(), rng.randf(), 1)
+			base_color = Utility.ensure_contrast_with_white(base_color) 
+			set_sprite_color(base_color)
+			set_sprite_border_color(base_color.lightened(0.5))
 		elif _type == GlobalConst.OperatorType.MULTI:
 			drop_zone_type = GlobalConst.DropZone.IN_BETWEEN
 			set_sprite_color(Color(0.8, 0.3, 0.2, 1))
+			set_sprite_border_color(Color(0.8, 0.3, 0.2, 1).lightened(0.5))
 
 # initializing the values
 func Initialize_Value(
@@ -114,9 +127,17 @@ func set_board_pos(r: int, c: int):
 	board_row = r
 	board_col = c
 
-func set_sprite_color(new_color: Color) -> void:
+func set_sprite_color(new_color: Color):
 	if bg.material is ShaderMaterial:
 		bg.material.set_shader_parameter("tile_color", new_color)
+
+func set_sprite_border_color(new_color: Color):
+	if bg.material is ShaderMaterial:
+		bg.material.set_shader_parameter("border_color", new_color)
+
+func set_sprite_type(t: int):
+	if bg.material is ShaderMaterial:
+		bg.material.set_shader_parameter("shape_type", t)
 
 func set_state(new_state: STATE):
 	_state = new_state
