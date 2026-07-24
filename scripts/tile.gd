@@ -111,6 +111,9 @@ func set_board_pos(r: int, c: int):
 	board_row = r
 	board_col = c
 
+func set_state(new_state: STATE):
+	_state = new_state
+	
 # function to tween position of the opertor tile
 func tween_pos(
 	target_position: Vector2, 
@@ -131,6 +134,12 @@ func drop_op_tile(removed_op_index: int):
 	if removed_op_index < stack_pos:
 		stack_pos -= 1
 		_state = STATE.DROPPING
+#
+#func drop_op_tile_negative(removed_i: int, swap_i: int):
+	#if swap_i < removed_i:
+		#pass
+	#else:
+		#drop_op_tile(removed_i)
 
 ## Check if the current Opertator Tile can be droped or not
 func check_drop():
@@ -138,7 +147,7 @@ func check_drop():
 	is_draggable = false
 	
 	if is_in_drop_zone && drop_zone_ref:
-		if drop_zone_ref.type == GlobalConst.DropZone.ON_TOP:
+		if drop_zone_ref.type == GlobalConst.DropZone.ON_TOP && drop_zone_ref.is_active:
 			var tile: Tile = drop_zone_ref.tiles[0]
 			
 			GameManager.consume_operator({
@@ -159,62 +168,21 @@ func check_drop():
 	
 func remove_tile():
 	animation_player.play("destroy")
+	
+	await get_tree().create_timer(.4).timeout
 	queue_free()
 
-## Operate on the tile with given value and symbol
-#func operate(val: int, sym: GlobalConst.OperatorSymbol):
-	#if sym == GlobalConst.OperatorSymbol.SUB:
-		#_value -= val
-	#elif sym == GlobalConst.OperatorSymbol.DIVIDE:
-		#var newValue: float = _value % val
-		### if there is no reminder
-		#if newValue == 0:
-			#_value /= val
-		#else:
-			## TODO split into multiple tiles
-			#_value = int(newValue)
-	#
-	#GameManager.update_board(int(num_tile_position[0]), int(num_tile_position[1]), int(_value))
-	#num_val.text = str(_value)
-	#
-	#if _value <= 0:
-		#GameManager.update_board(int(num_tile_position[0]), int(num_tile_position[1]), 0)
-		#if _value < 0:
-			## Change the 4th or 5th in line operator tile
-			## with this tile
-			#var pos = [5, 4].pick_random()
-			#var op_tile = GameManager.create_tile()
-			#
-			#op_tile.position = self.position
-			#op_tile._state = STATE.MOVING_TO_STACK
-			#
-			#var width = get_window().size.x
-			#var height = get_window().size.y
-			#
-			#op_tile.initial_position = Vector2(width - 80, height - pos+1 * 80)
-			#add_sibling(op_tile)
-			#op_tile.init_tile(
-				#abs(_value), 
-				#GlobalConst.OperatorSymbol.SUB, 
-				#GlobalConst.OperatorType.SINGLE,
-				#pos,
-			#)
-			#
-		## destroy the tile
-		#queue_free()
-#
-
-#
-## change state to droping if operator below it is removed
-#func drop_operator_tile(last_operator_pos: int):
-	#if last_operator_pos < operator_tile_position:
-		#operator_tile_position -= 1
-		#_state = STATE.DROPING
-
+func remove_tile_by_swap():
+	tween_pos(Vector2(self.position.x + 60, self.position.y), 0.4)
+	
+	await get_tree().create_timer(.8).timeout
+	queue_free()
 
 ## On Mouse Entering the Drag Area (Area2D)
 func _on_drag_area_mouse_entered():
-	if !DragHelper.picked_operator_tile && stack_pos >= 0 && stack_pos < 3:
+	if !DragHelper.picked_operator_tile\
+		 && stack_pos >= 0 && stack_pos < 3\
+		 && _state == STATE.IDLE:
 		initial_position = self.position
 		is_draggable = true
 		scale = Vector2(.7, .7)
