@@ -12,6 +12,7 @@ var board: Array[Array]
 var drop_zones: Array[Array]
 
 var level: int = 1
+var _board_gap: int = 90
 
 func _ready():
 	GameManager.board_updated.connect(on_board_updated)
@@ -65,7 +66,7 @@ func new_game():
 # Initiate number tile in the board
 func initiate_num_tile(v: int, r: int, c: int) -> Tile:
 	var tile: Tile = TilePrefab.instantiate()
-	tile.position = Vector2((c+1) * 100, (r+2) * 80)
+	tile.position = Vector2((c+1) * _board_gap, (r+1) * _board_gap)
 	main_grid.add_child(tile)
 	tile.Initialize_Value(v)
 	tile.set_board_pos(r, c)
@@ -83,7 +84,7 @@ func add_on_top_drop_zone(r: int, c: int, tile: Tile) -> DropZone:
 	dropZone.is_active = true
 	dropZone.tiles.append(tile)
 	dropZone.board_pos = Vector2(r, c)
-	dropZone.position = Vector2((c+1) * 100, (r+2) * 80)
+	dropZone.position = Vector2((c+1) * _board_gap, (r+1) * _board_gap)
 	main_grid.add_child(dropZone)
 	
 	return dropZone

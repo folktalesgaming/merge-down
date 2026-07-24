@@ -1,6 +1,12 @@
 [gd_scene format=3 uid="uid://b2d4x6fe8wqvu"]
 
 [ext_resource type="Script" uid="uid://xbnkqp3fpcoh" path="res://scripts/tile.gd" id="1_7eqyh"]
+[ext_resource type="Shader" uid="uid://dc5qjo7uae0gd" path="res://resources/tile.gdshader" id="2_4u2g1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_565gr"]
+shader = ExtResource("2_4u2g1")
+shader_parameter/radius = 0.15
+shader_parameter/tile_color = Color(0, 0, 0, 1)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_q4lci"]
 
@@ -68,6 +74,7 @@ script = ExtResource("1_7eqyh")
 [node name="Bg" type="Sprite2D" parent="." unique_id=122569874]
 unique_name_in_owner = true
 self_modulate = Color(0, 0, 0, 1)
+material = SubResource("ShaderMaterial_565gr")
 scale = Vector2(70, 70)
 texture = SubResource("CanvasTexture_q4lci")
 

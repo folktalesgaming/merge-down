@@ -39,6 +39,9 @@ var board_row: int = -1
 var board_col: int = -1
 
 # in built functions
+func _ready():
+	bg.material = bg.material.duplicate()
+
 func _process(delta):
 	if is_draggable:
 		if Input.is_action_just_pressed("click"):
@@ -81,16 +84,16 @@ func render_tile(val: int):
 	if _type == GlobalConst.OperatorType.NUM:
 		var rng := RandomNumberGenerator.new()
 		rng.seed = val
-		bg.self_modulate = Color(rng.randf(), rng.randf(), rng.randf(), 1)
+		set_sprite_color(Color(rng.randf(), rng.randf(), rng.randf(), 1))
 		
 		is_draggable = false
 	else:
 		if _type == GlobalConst.OperatorType.SINGLE:
 			drop_zone_type = GlobalConst.DropZone.ON_TOP
-			bg.self_modulate = Color(0.4, 0.45, 0.35, 1)
+			set_sprite_color(Color(0.4, 0.45, 0.35, 1))
 		elif _type == GlobalConst.OperatorType.MULTI:
 			drop_zone_type = GlobalConst.DropZone.IN_BETWEEN
-			bg.self_modulate = Color(0.8, 0.3, 0.2, 1)
+			set_sprite_color(Color(0.8, 0.3, 0.2, 1))
 
 # initializing the values
 func Initialize_Value(
@@ -110,6 +113,10 @@ func set_stack_pos(s_pos: int):
 func set_board_pos(r: int, c: int):
 	board_row = r
 	board_col = c
+
+func set_sprite_color(new_color: Color) -> void:
+	if bg.material is ShaderMaterial:
+		bg.material.set_shader_parameter("tile_color", new_color)
 
 func set_state(new_state: STATE):
 	_state = new_state

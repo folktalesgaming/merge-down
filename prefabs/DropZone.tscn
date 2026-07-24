@@ -1,12 +1,18 @@
 [gd_scene format=3 uid="uid://dn4hbgk1j3eew"]
 
 [ext_resource type="Script" uid="uid://dvu3csm4j8g8" path="res://scripts/drop_zone.gd" id="1_auexc"]
+[ext_resource type="Texture2D" uid="uid://5nfsgot0qmtp" path="res://assets/DropZone.png" id="2_mxpqa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_htemk"]
-size = Vector2(62, 61)
+size = Vector2(98, 96)
 
 [node name="DropZone" type="Area2D" unique_id=1079084927]
 script = ExtResource("1_auexc")
 
+[node name="ColorRect" type="Sprite2D" parent="." unique_id=1026772829]
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("2_mxpqa")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1461510901]
+scale = Vector2(0.8, 0.8)
 shape = SubResource("RectangleShape2D_htemk")
