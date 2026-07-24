@@ -155,20 +155,25 @@ func check_drop():
 	
 	if is_in_drop_zone && drop_zone_ref:
 		if drop_zone_ref.type == GlobalConst.DropZone.ON_TOP && drop_zone_ref.is_active:
-			var tile: Tile = drop_zone_ref.tiles[0]
-			
 			GameManager.consume_operator({
 				value = self._value,
 				symbol = self._symbol,
 				type = self._type,
 				index = self.stack_pos
-			}, tile.board_row, tile.board_col)
+			}, drop_zone_ref.board_pos[0].x, drop_zone_ref.board_pos[0].y)
 			DragHelper.remove_picked_tile()
 			remove_tile()
-		elif drop_zone_ref.type == GlobalConst.DropZone.IN_BETWEEN:
-			_state = STATE.BACKTOIDLE
+		elif drop_zone_ref.type == GlobalConst.DropZone.IN_BETWEEN && drop_zone_ref.is_active:
+			GameManager.consume_multi_operator({
+				value = self._value,
+				symbol = self._symbol,
+				type = self._type,
+				index = self.stack_pos
+			}, 
+			[Vector2(drop_zone_ref.board_pos[0].x, drop_zone_ref.board_pos[0].y), 
+			Vector2(drop_zone_ref.board_pos[1].x, drop_zone_ref.board_pos[1].y)])
 			DragHelper.remove_picked_tile()
-			pass
+			remove_tile()
 	else:
 		_state = STATE.BACKTOIDLE
 		DragHelper.remove_picked_tile()

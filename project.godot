@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 DragHelper="*uid://buekrju72jwsi"
+Utility="*uid://mirb5o7i8et6"
 GameManager="*uid://wdaydwgf24ww"
 
 [display]

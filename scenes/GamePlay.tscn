@@ -15,6 +15,9 @@ position = Vector2(573.99994, 321.00003)
 scale = Vector2(1185.9999, 684.00006)
 texture = SubResource("CanvasTexture_14cdr")
 
+[node name="DropZones" type="Node2D" parent="." unique_id=1302039230]
+unique_name_in_owner = true
+
 [node name="MainGrid" type="Node2D" parent="." unique_id=903045838]
 unique_name_in_owner = true
 
@@ -54,6 +57,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="CompleteHeading" type="Label" parent="UI/Container/VBoxContainer" unique_id=1844318558]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Level Completed"
 horizontal_alignment = 1

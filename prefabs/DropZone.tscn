@@ -10,6 +10,7 @@ size = Vector2(98, 96)
 script = ExtResource("1_auexc")
 
 [node name="ColorRect" type="Sprite2D" parent="." unique_id=1026772829]
+unique_name_in_owner = true
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("2_mxpqa")
 

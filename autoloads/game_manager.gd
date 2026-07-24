@@ -5,6 +5,9 @@ signal tile_cleared(row: int, col: int)
 signal new_operator_tile_added(removed_op_index: int)
 signal negative_hazard(s_i: int, val: int, r: int, c: int, r_i: int)
 signal level_completed()
+signal in_between_tile_status_changed(r: int, c: int, status: bool)
+signal level_stuck()
+
 
 # Properties
 var _board: Array[Array]
@@ -12,6 +15,8 @@ var _op_stack: Array[Dictionary]
 var _board_size: int = 5
 var _stack_size: int = 7
 var _total: int = 0
+
+var _in_between_drop_zone_status: Array[Array]
 
 var _lower_limit: int = 8
 var _upper_limit: int = 40
@@ -51,12 +56,12 @@ func set_upper_limit(u_limit: int):
 func get_upper_limit() -> int:
 	return _upper_limit
 
-
 # CUSTOM FUNCTIONS
 
 # Initialize board with random values
 func Initialize_Board():
 	_board.clear()
+	_in_between_drop_zone_status.clear()
 	_total = 0
 	
 	for i in range(_board_size):
@@ -83,7 +88,7 @@ func get_rand_op_data(i: int, val: int = -1) -> Dictionary:
 	return {
 		value = new_val,
 		symbol = randi_range(0, GlobalConst.OperatorSymbol.size() - 2),
-		type = randi_range(1, GlobalConst.OperatorType.size() - 1),
+		type = Utility.get_weighted_random_type([0, 70, 30]),
 		index = i,
 	};
 
@@ -120,6 +125,7 @@ func consume_operator(op_tile_data: Dictionary, row: int, col: int):
 		_total -= current_val
 		_board[row][col] = 0
 		tile_cleared.emit(row, col)
+		in_between_tile_status_changed.emit(row, col, false)
 		
 		if result < 0:
 			new_op_tile_created = true
@@ -131,8 +137,6 @@ func consume_operator(op_tile_data: Dictionary, row: int, col: int):
 		_board[row][col] = result
 		board_updated.emit(row, col, result)
 	
-	print(_total)
-	
 	if _total == 0:
 		level_completed.emit()
 		return
@@ -141,4 +145,111 @@ func consume_operator(op_tile_data: Dictionary, row: int, col: int):
 		_op_stack.remove_at(op_tile_pos)
 		_op_stack.append(get_rand_op_data(6))
 		new_operator_tile_added.emit(op_tile_pos)
+	
+	if check_stuck():
+		level_stuck.emit()
+
+
+func consume_multi_operator(op_data: Dictionary, tiles_pos: Array[Vector2]):
+	var r_1: int = tiles_pos[0].x
+	var c_1: int = tiles_pos[0].y
+	var r_2: int = tiles_pos[1].x
+	var c_2: int = tiles_pos[1].y
+	
+	var board_one_val: int = _board[r_1][c_1]
+	var board_two_val: int = _board[r_2][c_2]
+	var sym: GlobalConst.OperatorSymbol = op_data["symbol"]
+	var op_tile_pos: int = op_data["index"]
+	
+	var is_merged_to_board_one: bool = true
+	var new_op_tile_created: bool = false
+	
+	var result: int = 0
+	
+	match sym:
+		GlobalConst.OperatorSymbol.SUB:
+			if board_one_val > board_two_val:
+				result = board_one_val - board_two_val
+			else:
+				is_merged_to_board_one = false
+				result = board_two_val - board_one_val
+		GlobalConst.OperatorSymbol.DIVIDE:
+			var rem: int = 0
+			if board_one_val > board_two_val:
+				rem = board_one_val % board_two_val
+				if rem == 0:
+					result = board_one_val / board_two_val
+				else:
+					# TODO: SPLIT
+					result = rem
+			else:
+				is_merged_to_board_one = false
+				rem = board_two_val % board_one_val
+				if rem == 0:
+					result = board_two_val / board_one_val
+				else:
+					# TODO: SPLIT
+					result = rem
+	
+	if result <= 0:
+		_total -= (board_one_val+board_two_val)
+		_board[r_1][c_1] = 0
+		_board[r_2][c_2] = 0
+		tile_cleared.emit(r_1, c_1)
+		tile_cleared.emit(r_2, c_2)
 		
+		in_between_tile_status_changed.emit(r_1, c_1, false)
+		in_between_tile_status_changed.emit(r_2, c_2, false)
+		
+		if result < 0:
+			new_op_tile_created = true
+			var rand_index = randi_range(0, 6)
+			_op_stack[rand_index] = get_rand_op_data(rand_index)
+			negative_hazard.emit(rand_index, result, r_1, c_1, op_tile_pos)
+	else:
+		_total -= (board_one_val+board_two_val) - result
+		if is_merged_to_board_one:
+			_board[r_1][c_1] = result
+			board_updated.emit(r_1, c_1, result)
+			tile_cleared.emit(r_2, c_2)
+			in_between_tile_status_changed.emit(r_2, c_2, false)
+		else:
+			_board[r_2][c_2] = result
+			board_updated.emit(r_2, c_2, result)
+			tile_cleared.emit(r_1, c_1)
+			in_between_tile_status_changed.emit(r_1, c_1, false)
+			
+	if _total == 0:
+		level_completed.emit()
+		return
+	
+	if !new_op_tile_created:
+		_op_stack.remove_at(op_tile_pos)
+		_op_stack.append(get_rand_op_data(6))
+		new_operator_tile_added.emit(op_tile_pos)
+	
+	if check_stuck():
+		level_stuck.emit()
+
+
+func check_stuck() -> bool:
+	var has_active_multi_zone: bool = false
+	
+	for i in range(_in_between_drop_zone_status.size()):
+		for j in range(_in_between_drop_zone_status[i].size()):
+			if _in_between_drop_zone_status[i][j].is_active:
+				has_active_multi_zone = true
+				break
+		if has_active_multi_zone:
+			break
+
+	var has_single_operator: bool = false
+	for i in range(3):
+		if _op_stack[i]["type"] == GlobalConst.OperatorType.SINGLE:
+			has_single_operator = true
+			break
+	
+	if has_active_multi_zone or has_single_operator:
+		return false
+	
+	return true
