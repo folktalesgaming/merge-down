@@ -16,6 +16,8 @@ var _board_size: int = 5
 var _stack_size: int = 7
 var _total: int = 0
 
+var _level: int = 1
+
 var _in_between_drop_zone_status: Array[Array]
 
 var _lower_limit: int = 8
@@ -55,6 +57,13 @@ func set_upper_limit(u_limit: int):
 
 func get_upper_limit() -> int:
 	return _upper_limit
+
+# LEVEL
+func set_level(lvl: int):
+	_level = lvl
+
+func get_level() -> int:
+	return _level
 
 # CUSTOM FUNCTIONS
 
@@ -107,7 +116,7 @@ func consume_operator(op_tile_data: Dictionary, row: int, col: int):
 	var op_tile_pos: int = op_tile_data["index"]
 	
 	var new_op_tile_created: bool = false
-	
+	var split_val: int = -1
 	var result: int = 0
 	
 	match op_tile_data["symbol"]:
@@ -116,10 +125,17 @@ func consume_operator(op_tile_data: Dictionary, row: int, col: int):
 		GlobalConst.OperatorSymbol.DIVIDE:
 			var rem: int = current_val % op_val
 			if rem == 0:
+				@warning_ignore("integer_division")
 				result = int(current_val/op_val)
 			else:
-				# TODO: SPLIT INSTEAD OF reminder
-				result = rem
+				@warning_ignore("integer_division")
+				var div_val: int = int(current_val/op_val)
+				if div_val == 0:
+					result = current_val + 3
+				else:
+					result = rem
+					#result = div_val
+					#split_val = rem
 	
 	if result <= 0:
 		_total -= current_val
@@ -136,6 +152,16 @@ func consume_operator(op_tile_data: Dictionary, row: int, col: int):
 		_total -= (current_val - result)
 		_board[row][col] = result
 		board_updated.emit(row, col, result)
+		
+		if split_val != -1:
+			var split_neighbour: Vector2 = Utility.get_valid_next_tile(row, col, _board_size)
+			var n_r = int(split_neighbour.x)
+			var n_c = int(split_neighbour.y)
+			
+			_total -= (_board[n_r][n_c] - split_val)
+			
+			_board[n_r][n_c] = split_val
+			board_updated.emit(n_r, n_c, split_val)
 	
 	if _total == 0:
 		level_completed.emit()
@@ -151,9 +177,13 @@ func consume_operator(op_tile_data: Dictionary, row: int, col: int):
 
 
 func consume_multi_operator(op_data: Dictionary, tiles_pos: Array[Vector2]):
+	@warning_ignore("narrowing_conversion")
 	var r_1: int = tiles_pos[0].x
+	@warning_ignore("narrowing_conversion")
 	var c_1: int = tiles_pos[0].y
+	@warning_ignore("narrowing_conversion")
 	var r_2: int = tiles_pos[1].x
+	@warning_ignore("narrowing_conversion")
 	var c_2: int = tiles_pos[1].y
 	
 	var board_one_val: int = _board[r_1][c_1]
@@ -178,6 +208,7 @@ func consume_multi_operator(op_data: Dictionary, tiles_pos: Array[Vector2]):
 			if board_one_val > board_two_val:
 				rem = board_one_val % board_two_val
 				if rem == 0:
+					@warning_ignore("integer_division")
 					result = board_one_val / board_two_val
 				else:
 					# TODO: SPLIT
@@ -186,6 +217,7 @@ func consume_multi_operator(op_data: Dictionary, tiles_pos: Array[Vector2]):
 				is_merged_to_board_one = false
 				rem = board_two_val % board_one_val
 				if rem == 0:
+					@warning_ignore("integer_division")
 					result = board_two_val / board_one_val
 				else:
 					# TODO: SPLIT
@@ -253,3 +285,205 @@ func check_stuck() -> bool:
 		return false
 	
 	return true
+
+
+# FOR TUTORIAL
+var _tut_board_val = [
+	[34, 55],
+	[6, 30]
+]
+var _tut_board_val_two = [
+	[24, 8],
+	[3, 17]
+]
+var _tut_board_val_three = [
+	[43, 20],
+	[31, 7]
+]
+var _tut_board_val_last = [
+	[12, 5],
+	[9, 3]
+]
+
+var _tut_op_val = [
+	{
+		value = 14,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 0,
+	},
+	{
+		value = 0,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.MULTI,
+		index = 1,
+	},
+	{
+		value = 0,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.MULTI,
+		index = 2,
+	},
+	{
+		value = 7,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 3,
+	},
+	{
+		value = 0,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.MULTI,
+		index = 4,
+	},
+	{
+		value = 3,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 5,
+	},
+	{
+		value = 8,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 6,
+	},
+]
+var _tut_op_val_two = [
+	{
+		value = 24,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 0,
+	},
+	{
+		value = 17,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 1,
+	},
+	{
+		value = 0,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.MULTI,
+		index = 2,
+	},
+	{
+		value = 0,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.MULTI,
+		index = 3,
+	},
+	{
+		value = 0,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.MULTI,
+		index = 4,
+	},
+	{
+		value = 3,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 5,
+	},
+	{
+		value = 8,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 6,
+	},
+]
+var _tut_op_val_three = [
+	{
+		value = 12,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 0,
+	},
+	{
+		value = 45,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 1,
+	},
+	{
+		value = 10,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 2,
+	},
+	{
+		value = 0,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.MULTI,
+		index = 3,
+	},
+	{
+		value = 0,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.MULTI,
+		index = 4,
+	},
+	{
+		value = 0,
+		symbol = GlobalConst.OperatorSymbol.DIVIDE,
+		type = GlobalConst.OperatorType.MULTI,
+		index = 5,
+	},
+	{
+		value = 1,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 6,
+	},
+]
+var _tut_op_val_last = [
+	{
+		value = 25,
+		symbol = GlobalConst.OperatorSymbol.SUB,
+		type = GlobalConst.OperatorType.SINGLE,
+		index = 0,
+	},
+]
+
+
+func Initialize_Board_Tutorial(tut_level: int):
+	_board.clear()
+	_in_between_drop_zone_status.clear()
+	_total = 0
+	
+	var use_board = _tut_board_val
+	
+	if tut_level == 2:
+		use_board = _tut_board_val_two
+	if tut_level == 3:
+		use_board = _tut_board_val_three
+	if tut_level == 4:
+		use_board = _tut_board_val_last
+	
+	for i in range(_board_size):
+		var row: Array[int] = []
+		row.resize(_board_size)
+		for j in range(_board_size):
+			var val = use_board[i][j]
+			row[j] = val
+			_total += val
+		_board.append(row)
+
+# Intialize stack with random operators
+func Initialize_Stack_Tutorial(tut_level: int):
+	_op_stack.clear()
+	
+	var use_op = _tut_op_val
+	if tut_level == 2:
+		use_op = _tut_op_val_two
+	if tut_level == 3:
+		use_op = _tut_op_val_three
+	if tut_level == 4:
+		use_op = _tut_op_val_last
+	
+	for i in range(_stack_size):
+		if tut_level >= 4 && i > 0:
+			_op_stack.append(get_rand_op_data(i))
+		else:
+			_op_stack.append(use_op[i])

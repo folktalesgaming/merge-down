@@ -1,4 +1,3 @@
-class_name GamePlay
 extends Node2D
 
 @onready var main_grid = %MainGrid
@@ -8,7 +7,7 @@ extends Node2D
 @onready var complete_heading = %CompleteHeading
 @onready var next_lvl_btn = %NextLvlBtn
 @onready var score = %Score
-@onready var title = %Title
+@onready var no_btn = %NoBtn
 
 const TilePrefab = preload("res://prefabs/Tile.tscn")
 const DropZonePrefab = preload("res://prefabs/DropZone.tscn")
@@ -17,6 +16,7 @@ var board: Array[Array]
 var drop_top_zones: Array[Array]
 var drop_in_zones: Array[Array]
 
+var level: int = 3
 var _board_gap: int = 90
 var _op_gap: int = 80
 var is_stucked: bool = false
@@ -54,8 +54,8 @@ func reset():
 
 func new_game():
 	# Initializing board and operator stack data
-	GameManager.Initialize_Board()
-	GameManager.Initialize_Stack()
+	GameManager.Initialize_Board_Tutorial(level)
+	GameManager.Initialize_Stack_Tutorial(level)
 	
 	var board_size = GameManager.get_board_size()
 	for i in range(board_size):
@@ -81,7 +81,6 @@ func new_game():
 		initiate_operator_tile(i)
 	
 	score.text = "Score: " + str(GameManager._total)
-	title.text = "LEVEL: " + str(GameManager.get_level())
 
 # Initiate number tile in the board
 func initiate_num_tile(v: int, r: int, c: int) -> Tile:
@@ -226,40 +225,43 @@ func on_level_completed():
 	score.text = "Score: " + str(GameManager._total)
 	
 	is_stucked = false
-	complete_heading.text = "Level Completed"
-	next_lvl_btn.text = "Next Level"
+	if level == 3:
+		complete_heading.text = "Ready for next feature"
+		next_lvl_btn.text = "One more? Ok"
+		no_btn.text = "I am bored play the game"
+	elif level == 4:
+		complete_heading.text = "Ready to play the game"
+		next_lvl_btn.text = "Yess, finally"
+		no_btn.text = "Born ready"
+	else:
+		complete_heading.text = "Learn new thing"
+		next_lvl_btn.text = "Yess"
+		no_btn.text = "No, Just play the game"
 	container.visible = true
 
 func on_level_stuck():
 	is_stucked = true
-	complete_heading.text = "Bad luck! You are stuck"
-	next_lvl_btn.text = "Restart level"
+	complete_heading.text = "If you have 3 multi opertor but no connected tiles that's game over"
+	next_lvl_btn.text = "Learn next thing"
+	no_btn.text = "That's enough let's play"
+	level += 1
 	container.visible = true
-
-func _process(_delta):
-	# Add new operator tile on the operator stack
-	# Or do nothing if negative hazard happens
-	#if GameManager._op_stack.size() < 7:
-		#initiate_operator_tile(6)
-	#
-	## check for level stuck
-	pass
-
 
 func _on_next_lvl_btn_pressed():
 	AudioManager.Play_Button_Click_SFX()
+	if level == 4:
+		GameManager.set_board_size(3)
+		get_tree().change_scene_to_file("res://scenes/GamePlay.tscn")
+		return
 	if !is_stucked:
-		GameManager.set_level(GameManager.get_level()+1)
-		if GameManager.get_board_size() < 5:
-			GameManager.set_board_size(GameManager.get_board_size()+1)
-		else:
-			GameManager.set_lower_limit(GameManager.get_lower_limit() + _board_gap - 15)
-			GameManager.set_upper_limit(GameManager.get_upper_limit() + _board_gap)
+		level += 1
 	reset()
 	new_game()
 	container.visible = false
 
-func _on_reset_btn_pressed():
+func _on_no_btn_pressed():
 	AudioManager.Play_Button_Click_SFX()
 	reset()
-	new_game()
+	container.visible = false
+	GameManager.set_board_size(3)
+	get_tree().change_scene_to_file("res://scenes/GamePlay.tscn")

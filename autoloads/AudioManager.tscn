@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://btp8nmipy0smg"]
+
+[ext_resource type="AudioStream" uid="uid://dseb2bx3sy7ft" path="res://assets/audio/select_006.ogg" id="1_4w5rg"]
+[ext_resource type="Script" uid="uid://bm1rxhnwsm31l" path="res://autoloads/audio_manager.gd" id="1_gamlx"]
+[ext_resource type="AudioStream" uid="uid://bsrrphxqwhcw2" path="res://assets/audio/error_005.ogg" id="3_0f8da"]
+[ext_resource type="AudioStream" uid="uid://b1sp7yxwp714q" path="res://assets/audio/click1.ogg" id="4_xld20"]
+
+[node name="AudioManager" type="Node2D" unique_id=774284432]
+script = ExtResource("1_gamlx")
+
+[node name="AudioListener2D" type="AudioListener2D" parent="." unique_id=374396329]
+
+[node name="consume_operator" type="AudioStreamPlayer2D" parent="." unique_id=1951856178]
+unique_name_in_owner = true
+stream = ExtResource("1_4w5rg")
+
+[node name="clear_tile" type="AudioStreamPlayer2D" parent="." unique_id=148006894]
+unique_name_in_owner = true
+stream = ExtResource("3_0f8da")
+
+[node name="button_click" type="AudioStreamPlayer2D" parent="." unique_id=2053382159]
+unique_name_in_owner = true
+stream = ExtResource("4_xld20")

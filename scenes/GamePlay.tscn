@@ -1,10 +1,20 @@
 [gd_scene format=3 uid="uid://cpdir8ulmsff2"]
 
 [ext_resource type="Script" uid="uid://bqwsrsdumtjck" path="res://scripts/game_play.gd" id="1_565gr"]
+[ext_resource type="Shader" uid="uid://dc5qjo7uae0gd" path="res://resources/tile.gdshader" id="2_tb18q"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_14cdr"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_htemk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nqbmw"]
+shader = ExtResource("2_tb18q")
+shader_parameter/shape_type = 1
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/border_thickness = 0.0
+shader_parameter/tile_color = Color(1, 1, 1, 1)
+shader_parameter/shape_size = 0.5
+shader_parameter/corner_radius = 0.05
 
 [node name="GamePlay" type="Node2D" unique_id=1093606612]
 script = ExtResource("1_565gr")
@@ -21,16 +31,64 @@ unique_name_in_owner = true
 [node name="MainGrid" type="Node2D" parent="." unique_id=903045838]
 unique_name_in_owner = true
 
-[node name="OperatorStack" type="Node2D" parent="." unique_id=110578599]
-unique_name_in_owner = true
-
-[node name="TempStack" type="Sprite2D" parent="." unique_id=1211098080]
-self_modulate = Color(0, 0, 0, 0.36078432)
-position = Vector2(1072, 208.125)
-scale = Vector2(83.999954, 321.75)
+[node name="Stack" type="Sprite2D" parent="." unique_id=1211098080]
+visible = false
+self_modulate = Color(0.78431374, 0.6392157, 0.8666667, 0.1254902)
+position = Vector2(1063, 313.125)
+scale = Vector2(102.00004, 531.75006)
 texture = SubResource("CanvasTexture_htemk")
 
+[node name="OperatorStack" type="Node2D" parent="." unique_id=110578599]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_nqbmw")
+
 [node name="UI" type="CanvasLayer" parent="." unique_id=79122986]
+
+[node name="InGameOverlay" type="HBoxContainer" parent="UI" unique_id=326152917]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="UI/InGameOverlay" unique_id=1653052051]
+layout_mode = 2
+
+[node name="InnerVBox" type="VBoxContainer" parent="UI/InGameOverlay" unique_id=363432535]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="padding" type="Control" parent="UI/InGameOverlay/InnerVBox" unique_id=1902346908]
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/InGameOverlay/InnerVBox" unique_id=1211138359]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ResetBtn" type="Button" parent="UI/InGameOverlay/InnerVBox/HBoxContainer" unique_id=270184789]
+layout_mode = 2
+text = "Reset"
+
+[node name="Title" type="Label" parent="UI/InGameOverlay/InnerVBox/HBoxContainer" unique_id=1969320983]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "LEVEL: "
+
+[node name="padding2" type="Control" parent="UI/InGameOverlay/InnerVBox" unique_id=1378912488]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Score" type="Label" parent="UI/InGameOverlay/InnerVBox" unique_id=746972668]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+
+[node name="padding3" type="Control" parent="UI/InGameOverlay/InnerVBox" unique_id=1150424144]
+layout_mode = 2
 
 [node name="Container" type="ColorRect" parent="UI" unique_id=1659256625]
 unique_name_in_owner = true
@@ -67,4 +125,5 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Next Level"
 
+[connection signal="pressed" from="UI/InGameOverlay/InnerVBox/HBoxContainer/ResetBtn" to="." method="_on_reset_btn_pressed"]
 [connection signal="pressed" from="UI/Container/VBoxContainer/NextLvlBtn" to="." method="_on_next_lvl_btn_pressed"]

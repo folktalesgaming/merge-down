@@ -90,10 +90,12 @@ func render_tile(val: int):
 		base_color = Utility.ensure_contrast_with_white(base_color) 
 		
 		set_sprite_color(base_color)
-		set_sprite_border_color(base_color.lightened(0.5))
+		set_sprite_border_color(base_color.darkened(0.5))
 		
 		is_draggable = false
 	else:
+		if stack_pos > 2:
+			bg.self_modulate.a = 0.2
 		if _type == GlobalConst.OperatorType.SINGLE:
 			drop_zone_type = GlobalConst.DropZone.ON_TOP
 			var rng := RandomNumberGenerator.new()
@@ -102,11 +104,11 @@ func render_tile(val: int):
 			var base_color := Color(rng.randf(), rng.randf(), rng.randf(), 1)
 			base_color = Utility.ensure_contrast_with_white(base_color) 
 			set_sprite_color(base_color)
-			set_sprite_border_color(base_color.lightened(0.5))
+			set_sprite_border_color(base_color.darkened(0.5))
 		elif _type == GlobalConst.OperatorType.MULTI:
 			drop_zone_type = GlobalConst.DropZone.IN_BETWEEN
 			set_sprite_color(Color(0.8, 0.3, 0.2, 1))
-			set_sprite_border_color(Color(0.8, 0.3, 0.2, 1).lightened(0.5))
+			set_sprite_border_color(Color(0.8, 0.3, 0.2, 1).darkened(0.5))
 
 # initializing the values
 func Initialize_Value(
@@ -161,6 +163,10 @@ func tween_pos(
 func drop_op_tile(removed_op_index: int):
 	if removed_op_index < stack_pos:
 		stack_pos -= 1
+		if stack_pos > 2:
+			bg.self_modulate.a = 0.2
+		else:
+			bg.self_modulate.a = 1
 		_state = STATE.DROPPING
 #
 #func drop_op_tile_negative(removed_i: int, swap_i: int):

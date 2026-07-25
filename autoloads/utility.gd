@@ -41,3 +41,26 @@ func linearize(channel: float) -> float:
 	if channel <= 0.03928:
 		return channel / 12.92
 	return pow((channel + 0.055) / 1.055, 2.4)
+
+
+
+# get valid neighbour tiles
+func get_valid_next_tile(r: int, c: int, size: int) -> Vector2:
+	var valid_tiles: Array[Vector2] = [
+		Vector2(r-1, c),
+		Vector2(r+1, c),
+		Vector2(r, c-1),
+		Vector2(r, c+1)
+	]
+	var to_remove_indices: Array[Vector2] = []
+	
+	for i in 4:
+		if valid_tiles[i].x < 0 or valid_tiles[i].y < 0:
+			to_remove_indices.append(valid_tiles[i])
+		elif valid_tiles[i].x >= size or valid_tiles[i].y >= size:
+			to_remove_indices.append(valid_tiles[i])
+	
+	for i in range(to_remove_indices.size()):
+		valid_tiles.erase(to_remove_indices[i])
+	
+	return valid_tiles.pick_random()

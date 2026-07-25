@@ -7,7 +7,7 @@
 shader = ExtResource("2_4u2g1")
 shader_parameter/shape_type = 0
 shader_parameter/border_color = Color(1, 1, 1, 1)
-shader_parameter/border_thickness = 0.01
+shader_parameter/border_thickness = 0.04
 shader_parameter/tile_color = Color(0, 0, 0, 1)
 shader_parameter/shape_size = 0.42
 shader_parameter/corner_radius = 0.05

@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://rhwbdbow16q7"]
+
+[ext_resource type="Shader" uid="uid://dc5qjo7uae0gd" path="res://resources/tile.gdshader" id="1_cfv3y"]
+[ext_resource type="Script" uid="uid://bvvbi61niomx8" path="res://scripts/tutorial.gd" id="1_ci5ev"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ci5ev"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_pgr2e"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ebau5"]
+shader = ExtResource("1_cfv3y")
+shader_parameter/shape_type = 1
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/border_thickness = 0.0
+shader_parameter/tile_color = Color(1, 1, 1, 1)
+shader_parameter/shape_size = 0.5
+shader_parameter/corner_radius = 0.05
+
+[node name="Tutorial" type="Node2D" unique_id=1933457528]
+script = ExtResource("1_ci5ev")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1158042030]
+self_modulate = Color(0.39215687, 0.25490198, 0.6039216, 1)
+position = Vector2(573.99994, 321.00003)
+scale = Vector2(1185.9999, 684.00006)
+texture = SubResource("CanvasTexture_ci5ev")
+
+[node name="DropZones" type="Node2D" parent="." unique_id=1735080266]
+unique_name_in_owner = true
+
+[node name="MainGrid" type="Node2D" parent="." unique_id=852958959]
+unique_name_in_owner = true
+
+[node name="Stack" type="Sprite2D" parent="." unique_id=615075039]
+visible = false
+self_modulate = Color(0.78431374, 0.6392157, 0.8666667, 0.1254902)
+position = Vector2(1063, 313.125)
+scale = Vector2(102.00004, 531.75006)
+texture = SubResource("CanvasTexture_pgr2e")
+
+[node name="OperatorStack" type="Node2D" parent="." unique_id=1366028533]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_ebau5")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=822770972]
+
+[node name="InGameOverlay" type="HBoxContainer" parent="UI" unique_id=812508454]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="UI/InGameOverlay" unique_id=1225612274]
+layout_mode = 2
+
+[node name="InnerVBox" type="VBoxContainer" parent="UI/InGameOverlay" unique_id=1867433118]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="padding" type="Control" parent="UI/InGameOverlay/InnerVBox" unique_id=1162312814]
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+
+[node name="Title" type="Label" parent="UI/InGameOverlay/InnerVBox" unique_id=1769302916]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Tutorial"
+
+[node name="padding2" type="Control" parent="UI/InGameOverlay/InnerVBox" unique_id=1971769876]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Score" type="Label" parent="UI/InGameOverlay/InnerVBox" unique_id=1325019370]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+
+[node name="padding3" type="Control" parent="UI/InGameOverlay/InnerVBox" unique_id=41288129]
+layout_mode = 2
+
+[node name="Container" type="ColorRect" parent="UI" unique_id=1185280675]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.6330588, 0.09218131, 0.78432053, 0.425)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Container" unique_id=1786217050]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.5
+offset_top = -11.5
+offset_right = 64.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CompleteHeading" type="Label" parent="UI/Container/VBoxContainer" unique_id=562746082]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Level Completed"
+horizontal_alignment = 1
+
+[node name="NextLvlBtn" type="Button" parent="UI/Container/VBoxContainer" unique_id=477623090]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Next Level"
+
+[node name="NoBtn" type="Button" parent="UI/Container/VBoxContainer" unique_id=436150189]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="pressed" from="UI/Container/VBoxContainer/NextLvlBtn" to="." method="_on_next_lvl_btn_pressed"]
+[connection signal="pressed" from="UI/Container/VBoxContainer/NoBtn" to="." method="_on_no_btn_pressed"]

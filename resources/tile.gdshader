@@ -2,7 +2,7 @@ shader_type canvas_item;
 
 uniform int shape_type : hint_range(0, 1) = 0;
 uniform vec4 border_color : source_color = vec4(1.0);
-uniform float border_thickness : hint_range(0.0, 0.1) = 0.02;
+uniform float border_thickness : hint_range(0.0, 0.1) = 0.04;
 uniform vec4 tile_color : source_color = vec4(1.0);
 uniform float shape_size : hint_range(0.1, 0.5) = 0.42;  
 uniform float corner_radius : hint_range(0.0, 0.2) = 0.05;

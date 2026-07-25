@@ -18,3 +18,12 @@ func add_board_pos(pos: Vector2):
 
 func check_board_pos(pos: Vector2) -> bool:
 	return board_pos.find(pos) != -1
+
+
+func get_another_pair(pos: Vector2) -> Vector2:
+	for i in range(2):
+		if check_board_pos(pos):
+			continue
+		return board_pos[i]
+	
+	return pos

@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://ckdsxjlbb01ml"]
+
+[ext_resource type="Script" uid="uid://b5f5wdjhqoxj4" path="res://scripts/main_menu.gd" id="1_yqorp"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ukcvp"]
+
+[node name="MainMenu" type="Node2D" unique_id=45626172]
+script = ExtResource("1_yqorp")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1410516826]
+self_modulate = Color(0.39215687, 0.25490198, 0.6039216, 1)
+position = Vector2(573.99994, 321.00003)
+scale = Vector2(1185.9999, 684.00006)
+texture = SubResource("CanvasTexture_ukcvp")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1706513850]
+
+[node name="InGameOverlay" type="VBoxContainer" parent="CanvasLayer" unique_id=1414850435]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -107.5
+offset_top = -22.5
+offset_right = 107.5
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 40
+
+[node name="Title" type="Label" parent="CanvasLayer/InGameOverlay" unique_id=1328045718]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Merge Doown"
+
+[node name="Start" type="Button" parent="CanvasLayer/InGameOverlay" unique_id=1067174985]
+layout_mode = 2
+text = "Start Game"
+
+[node name="Tutorial" type="Button" parent="CanvasLayer/InGameOverlay" unique_id=538947818]
+layout_mode = 2
+text = "Tutorial"
+
+[node name="Story" type="Button" parent="CanvasLayer/InGameOverlay" unique_id=227006335]
+layout_mode = 2
+text = "Read story"
+
+[connection signal="pressed" from="CanvasLayer/InGameOverlay/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="CanvasLayer/InGameOverlay/Tutorial" to="." method="_on_tutorial_pressed"]
