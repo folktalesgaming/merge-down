@@ -263,3 +263,9 @@ func _on_reset_btn_pressed():
 	AudioManager.Play_Button_Click_SFX()
 	reset()
 	new_game()
+
+
+func _on_exit_pressed():
+	AudioManager.Play_Button_Click_SFX()
+	reset()
+	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")

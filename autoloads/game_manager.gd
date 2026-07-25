@@ -8,6 +8,8 @@ signal level_completed()
 signal in_between_tile_status_changed(r: int, c: int, status: bool)
 signal level_stuck()
 
+# FOR TUTORIAL ONLY
+signal action_num_increased()
 
 # Properties
 var _board: Array[Array]
@@ -97,7 +99,7 @@ func get_rand_op_data(i: int, val: int = -1) -> Dictionary:
 	return {
 		value = new_val,
 		symbol = randi_range(0, GlobalConst.OperatorSymbol.size() - 2),
-		type = Utility.get_weighted_random_type([0, 70, 30]),
+		type = Utility.get_weighted_random_type([0, 65, 35]),
 		index = i,
 	};
 
@@ -163,6 +165,10 @@ func consume_operator(op_tile_data: Dictionary, row: int, col: int):
 			_board[n_r][n_c] = split_val
 			board_updated.emit(n_r, n_c, split_val)
 	
+	# FOR TUTORIAL ONLY
+	increase_action_num()
+	# TUTORIAL ONLY 
+	
 	if _total == 0:
 		level_completed.emit()
 		return
@@ -170,11 +176,12 @@ func consume_operator(op_tile_data: Dictionary, row: int, col: int):
 	if !new_op_tile_created:
 		_op_stack.remove_at(op_tile_pos)
 		_op_stack.append(get_rand_op_data(6))
+		_reorder_op_stack_index()
 		new_operator_tile_added.emit(op_tile_pos)
 	
+	await get_tree().create_timer(0.3).timeout
 	if check_stuck():
 		level_stuck.emit()
-
 
 func consume_multi_operator(op_data: Dictionary, tiles_pos: Array[Vector2]):
 	@warning_ignore("narrowing_conversion")
@@ -250,7 +257,11 @@ func consume_multi_operator(op_data: Dictionary, tiles_pos: Array[Vector2]):
 			board_updated.emit(r_2, c_2, result)
 			tile_cleared.emit(r_1, c_1)
 			in_between_tile_status_changed.emit(r_1, c_1, false)
-			
+	
+	# FOR TUTORIAL ONLY
+	increase_action_num()
+	# TUTORIAL ONLY 
+	
 	if _total == 0:
 		level_completed.emit()
 		return
@@ -258,11 +269,16 @@ func consume_multi_operator(op_data: Dictionary, tiles_pos: Array[Vector2]):
 	if !new_op_tile_created:
 		_op_stack.remove_at(op_tile_pos)
 		_op_stack.append(get_rand_op_data(6))
+		_reorder_op_stack_index()
 		new_operator_tile_added.emit(op_tile_pos)
 	
+	await get_tree().create_timer(0.3).timeout
 	if check_stuck():
 		level_stuck.emit()
 
+func _reorder_op_stack_index():
+	for i in range(_op_stack.size()):
+		_op_stack[i]["index"] = i
 
 func check_stuck() -> bool:
 	var has_active_multi_zone: bool = false
@@ -281,6 +297,8 @@ func check_stuck() -> bool:
 			has_single_operator = true
 			break
 	
+	#print(_op_stack)
+	#print(".... ", has_single_operator)
 	if has_active_multi_zone or has_single_operator:
 		return false
 	
@@ -288,6 +306,15 @@ func check_stuck() -> bool:
 
 
 # FOR TUTORIAL
+var action_num: int = 0
+
+func reset_action_num():
+	action_num = 0
+
+func increase_action_num():
+	action_num += 1
+	action_num_increased.emit()
+
 var _tut_board_val = [
 	[34, 55],
 	[6, 30]

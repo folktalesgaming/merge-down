@@ -45,6 +45,7 @@ layout_mode = 2
 text = "Tutorial"
 
 [node name="Story" type="Button" parent="CanvasLayer/InGameOverlay" unique_id=227006335]
+visible = false
 layout_mode = 2
 text = "Read story"
 
