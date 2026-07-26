@@ -86,7 +86,7 @@ func new_game():
 # Initiate number tile in the board
 func initiate_num_tile(v: int, r: int, c: int) -> Tile:
 	var tile: Tile = TilePrefab.instantiate()
-	tile.position = Vector2((c+1) * _board_gap, (r+1) * _board_gap)
+	tile.position = Vector2((c+1) * _board_gap, (r+1) * _board_gap + 40)
 	main_grid.add_child(tile)
 	tile.Initialize_Value(v)
 	tile.set_board_pos(r, c)
@@ -102,7 +102,7 @@ func add_on_top_drop_zone(r: int, c: int) -> DropZone:
 	dropZone.type = GlobalConst.DropZone.ON_TOP
 	dropZone.is_active = true
 	dropZone.add_board_pos(Vector2(r, c))
-	dropZone.position = Vector2((c+1) * _board_gap, (r+1) * _board_gap)
+	dropZone.position = Vector2((c+1) * _board_gap, (r+1) * _board_gap + 40)
 	drop_zones.add_child(dropZone)
 	
 	return dropZone
@@ -119,7 +119,7 @@ func add_in_between_drop_zone(r: int, c: int) -> Array[DropZone]:
 		d_zone.add_board_pos(Vector2(int(r + 1), int(c)))
 		d_zone.scale = Vector2(0.4, 0.5)
 		
-		d_zone.position = Vector2((c+1) * _board_gap, (r+1.5) * _board_gap)
+		d_zone.position = Vector2((c+1) * _board_gap, (r+1.5) * _board_gap + 40)
 		drop_zones.add_child(d_zone)
 		d_zones.append(d_zone)
 	
@@ -133,7 +133,7 @@ func add_in_between_drop_zone(r: int, c: int) -> Array[DropZone]:
 		d_zone.add_board_pos(Vector2(int(r), int(c + 1)))
 		d_zone.scale = Vector2(0.5, 0.4)
 		
-		d_zone.position = Vector2((c+1.5) * _board_gap, (r+1) * _board_gap)
+		d_zone.position = Vector2((c+1.5) * _board_gap, (r+1) * _board_gap + 40)
 		drop_zones.add_child(d_zone)
 		d_zones.append(d_zone)
 		

@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://ckdsxjlbb01ml"]
 
 [ext_resource type="Script" uid="uid://b5f5wdjhqoxj4" path="res://scripts/main_menu.gd" id="1_yqorp"]
+[ext_resource type="FontFile" uid="uid://duvsvxcwglba7" path="res://assets/DynaPuff-Bold.ttf" id="2_0ykhv"]
+[ext_resource type="Theme" uid="uid://cig2s7j4ia30t" path="res://resources/button.tres" id="3_ow34m"]
+[ext_resource type="Theme" uid="uid://3on3rxe810wj" path="res://resources/button_secondary.tres" id="4_l72w3"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_ukcvp"]
 
@@ -33,15 +36,20 @@ theme_override_constants/separation = 40
 
 [node name="Title" type="Label" parent="CanvasLayer/InGameOverlay" unique_id=1328045718]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Merge Doown"
+theme_override_fonts/font = ExtResource("2_0ykhv")
+theme_override_font_sizes/font_size = 72
+text = "MERGE 
+DOOWN"
+horizontal_alignment = 1
 
 [node name="Start" type="Button" parent="CanvasLayer/InGameOverlay" unique_id=1067174985]
 layout_mode = 2
+theme = ExtResource("3_ow34m")
 text = "Start Game"
 
 [node name="Tutorial" type="Button" parent="CanvasLayer/InGameOverlay" unique_id=538947818]
 layout_mode = 2
+theme = ExtResource("4_l72w3")
 text = "Tutorial"
 
 [node name="Story" type="Button" parent="CanvasLayer/InGameOverlay" unique_id=227006335]

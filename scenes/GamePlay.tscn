@@ -2,6 +2,43 @@
 
 [ext_resource type="Script" uid="uid://bqwsrsdumtjck" path="res://scripts/game_play.gd" id="1_565gr"]
 [ext_resource type="Shader" uid="uid://dc5qjo7uae0gd" path="res://resources/tile.gdshader" id="2_tb18q"]
+[ext_resource type="Texture2D" uid="uid://ydjknq3280w0" path="res://assets/small-btn-bg-1.png" id="3_bbtn3"]
+[ext_resource type="Texture2D" uid="uid://0dsu1f7bquyw" path="res://assets/small-btn-bg-2.png" id="4_aq4tv"]
+[ext_resource type="Texture2D" uid="uid://cd3k4w8vplfct" path="res://assets/small-btn-bg-1-hover.png" id="4_p4b6y"]
+[ext_resource type="Theme" uid="uid://cig2s7j4ia30t" path="res://resources/button.tres" id="5_7oah2"]
+[ext_resource type="FontFile" uid="uid://duvsvxcwglba7" path="res://assets/DynaPuff-Bold.ttf" id="5_b6bus"]
+[ext_resource type="Texture2D" uid="uid://ljxww3135o1g" path="res://assets/small-btn-bg-2-hover.png" id="6_p4b6y"]
+[ext_resource type="Texture2D" uid="uid://ba4uf26bxthy4" path="res://assets/score-bg.png" id="7_aq4tv"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7oah2"]
+texture = ExtResource("3_bbtn3")
+expand_margin_left = 40.0
+expand_margin_right = 40.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bbtn3"]
+texture = ExtResource("3_bbtn3")
+expand_margin_left = 40.0
+expand_margin_right = 40.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aq4tv"]
+texture = ExtResource("4_p4b6y")
+expand_margin_left = 40.0
+expand_margin_right = 40.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b6bus"]
+texture = ExtResource("4_aq4tv")
+expand_margin_left = 40.0
+expand_margin_right = 40.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6ftqr"]
+texture = ExtResource("4_aq4tv")
+expand_margin_left = 40.0
+expand_margin_right = 40.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8131l"]
+texture = ExtResource("6_p4b6y")
+expand_margin_left = 40.0
+expand_margin_right = 40.0
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_14cdr"]
 
@@ -18,6 +55,101 @@ shader_parameter/corner_radius = 0.05
 
 [node name="GamePlay" type="Node2D" unique_id=1093606612]
 script = ExtResource("1_565gr")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=79122986]
+
+[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1098845232]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 25
+
+[node name="InnerVBox" type="VBoxContainer" parent="UI/MarginContainer" unique_id=363432535]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/InnerVBox" unique_id=332996175]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer/InnerVBox/MarginContainer" unique_id=1211138359]
+layout_mode = 2
+theme_override_constants/separation = 90
+
+[node name="Exit" type="Button" parent="UI/MarginContainer/InnerVBox/MarginContainer/HBoxContainer" unique_id=1376700661]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxTexture_7oah2")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_bbtn3")
+theme_override_styles/hover = SubResource("StyleBoxTexture_aq4tv")
+text = "Exit"
+icon_alignment = 2
+
+[node name="ResetBtn" type="Button" parent="UI/MarginContainer/InnerVBox/MarginContainer/HBoxContainer" unique_id=270184789]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxTexture_b6bus")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_6ftqr")
+theme_override_styles/hover = SubResource("StyleBoxTexture_8131l")
+text = "Reset"
+
+[node name="Title" type="Label" parent="UI/MarginContainer/InnerVBox/MarginContainer/HBoxContainer" unique_id=1969320983]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "LEVEL: "
+
+[node name="padding" type="Control" parent="UI/MarginContainer/InnerVBox" unique_id=1378912488]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Score" type="Label" parent="UI/MarginContainer/InnerVBox" unique_id=746972668]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+
+[node name="Container" type="ColorRect" parent="UI" unique_id=1659256625]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.6330588, 0.09218131, 0.78432053, 0.425)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Container" unique_id=262713642]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.5
+offset_top = -25.0
+offset_right = 64.5
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 48
+
+[node name="CompleteHeading" type="Label" parent="UI/Container/VBoxContainer" unique_id=1844318558]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_b6bus")
+theme_override_font_sizes/font_size = 28
+text = "Level Completed"
+horizontal_alignment = 1
+
+[node name="NextLvlBtn" type="Button" parent="UI/Container/VBoxContainer" unique_id=1471540128]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("5_7oah2")
+text = "Next Level"
 
 [node name="Background" type="Sprite2D" parent="." unique_id=2298987]
 self_modulate = Color(0.39215687, 0.25490198, 0.6039216, 1)
@@ -42,93 +174,11 @@ texture = SubResource("CanvasTexture_htemk")
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_nqbmw")
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=79122986]
+[node name="ScoreBg" type="Sprite2D" parent="." unique_id=858723003]
+position = Vector2(187, 621)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_aq4tv")
 
-[node name="InGameOverlay" type="HBoxContainer" parent="UI" unique_id=326152917]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 40
-metadata/_edit_use_anchors_ = true
-
-[node name="Control" type="Control" parent="UI/InGameOverlay" unique_id=1653052051]
-layout_mode = 2
-
-[node name="InnerVBox" type="VBoxContainer" parent="UI/InGameOverlay" unique_id=363432535]
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="padding" type="Control" parent="UI/InGameOverlay/InnerVBox" unique_id=1902346908]
-layout_mode = 2
-size_flags_stretch_ratio = 0.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/InGameOverlay/InnerVBox" unique_id=1211138359]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Exit" type="Button" parent="UI/InGameOverlay/InnerVBox/HBoxContainer" unique_id=1376700661]
-layout_mode = 2
-text = "Exit"
-
-[node name="ResetBtn" type="Button" parent="UI/InGameOverlay/InnerVBox/HBoxContainer" unique_id=270184789]
-layout_mode = 2
-text = "Reset"
-
-[node name="Title" type="Label" parent="UI/InGameOverlay/InnerVBox/HBoxContainer" unique_id=1969320983]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "LEVEL: "
-
-[node name="padding2" type="Control" parent="UI/InGameOverlay/InnerVBox" unique_id=1378912488]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Score" type="Label" parent="UI/InGameOverlay/InnerVBox" unique_id=746972668]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-
-[node name="padding3" type="Control" parent="UI/InGameOverlay/InnerVBox" unique_id=1150424144]
-layout_mode = 2
-
-[node name="Container" type="ColorRect" parent="UI" unique_id=1659256625]
-unique_name_in_owner = true
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.6330588, 0.09218131, 0.78432053, 0.425)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Container" unique_id=262713642]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -64.5
-offset_top = -11.5
-offset_right = 64.5
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="CompleteHeading" type="Label" parent="UI/Container/VBoxContainer" unique_id=1844318558]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Level Completed"
-horizontal_alignment = 1
-
-[node name="NextLvlBtn" type="Button" parent="UI/Container/VBoxContainer" unique_id=1471540128]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Next Level"
-
-[connection signal="pressed" from="UI/InGameOverlay/InnerVBox/HBoxContainer/Exit" to="." method="_on_exit_pressed"]
-[connection signal="pressed" from="UI/InGameOverlay/InnerVBox/HBoxContainer/ResetBtn" to="." method="_on_reset_btn_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/InnerVBox/MarginContainer/HBoxContainer/Exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/InnerVBox/MarginContainer/HBoxContainer/ResetBtn" to="." method="_on_reset_btn_pressed"]
 [connection signal="pressed" from="UI/Container/VBoxContainer/NextLvlBtn" to="." method="_on_next_lvl_btn_pressed"]
